@@ -8,26 +8,22 @@ export default async function handler(req, res) {
   }
 
   try {
-    // 🔥 New API (Subhxcosmo)
     const response = await fetch(
       `https://api.subhxcosmo.in/api?key=${api_key}&type=vehicle_num&term=${regNo}`
     );
 
-    const data = await response.json(); // ✅ direct JSON
+    const data = await response.json();
 
-    // 🔥 Modify response (same style rakhna)
-    const modified = {
+    // 🔥 SAME DATA return (no change)
+    return res.status(200).json({
       ...data,
       API_BY: "MYNK",
-      API_SOURCE: "@mynk_mynk_mynk",
-      BuyAPI: "@mynk_mynk_mynk"
-    };
-
-    return res.status(200).json(modified);
+      API_SOURCE: "@mynk_mynk_mynk"
+    });
 
   } catch (err) {
     return res.status(500).json({
-      error: "Failed to fetch data",
+      error: "Server error",
       message: err.message
     });
   }
