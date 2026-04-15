@@ -8,29 +8,14 @@ export default async function handler(req, res) {
   }
 
   try {
+    // 🔥 New API (Subhxcosmo)
     const response = await fetch(
-      `https://vehicle.wuaze.com/?vehicle=${regNo}`,
-      {
-        headers: {
-          "User-Agent": "Mozilla/5.0",
-          "Accept": "application/json",
-          "Referer": "https://vehicle.wuaze.com/"
-        }
-      }
+      `https://api.subhxcosmo.in/api?key=${api_key}&type=vehicle_num&term=${regNo}`
     );
 
-    const text = await response.text();
+    const data = await response.json(); // ✅ direct JSON
 
-    let data;
-    try {
-      data = JSON.parse(text);
-    } catch {
-      return res.status(500).json({
-        error: "Blocked by Wuaze",
-        preview: text.substring(0, 200)
-      });
-    }
-
+    // 🔥 Modify response (same style rakhna)
     const modified = {
       ...data,
       API_BY: "MYNK",
@@ -42,7 +27,7 @@ export default async function handler(req, res) {
 
   } catch (err) {
     return res.status(500).json({
-      error: "Server error",
+      error: "Failed to fetch data",
       message: err.message
     });
   }
