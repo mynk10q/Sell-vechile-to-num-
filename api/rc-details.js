@@ -1,7 +1,6 @@
 export default async function handler(req, res) {
   const { regNo, api_key } = req.query;
 
-  // 🔥 Same validation (URL same rahe)
   if (!regNo || !api_key) {
     return res.status(400).json({
       error: "regNo and api_key required"
@@ -9,9 +8,15 @@ export default async function handler(req, res) {
   }
 
   try {
-    // 🔥 Backend API change (WUAZE)
     const response = await fetch(
-      `https://vehicle.wuaze.com/?vehicle=${regNo}`
+      `https://vehicle.wuaze.com/?vehicle=${regNo}`,
+      {
+        headers: {
+          "User-Agent": "Mozilla/5.0",
+          "Accept": "application/json",
+          "Referer": "https://vehicle.wuaze.com/"
+        }
+      }
     );
 
     const text = await response.text();
@@ -21,12 +26,11 @@ export default async function handler(req, res) {
       data = JSON.parse(text);
     } catch {
       return res.status(500).json({
-        error: "API not returning JSON",
-        preview: text.substring(0, 150)
+        error: "Blocked by Wuaze",
+        preview: text.substring(0, 200)
       });
     }
 
-    // 🔥 Same response style + branding
     const modified = {
       ...data,
       API_BY: "MYNK",
