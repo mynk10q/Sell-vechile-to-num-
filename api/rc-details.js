@@ -1,7 +1,6 @@
 export default async function handler(req, res) {
   const { regNo, api_key } = req.query;
 
-  // 🔐 FRONTEND KEY CHECK (jo tu users ko dega)
   const USER_KEY = "hacker_0b3b424a";
 
   if (!regNo || !api_key) {
@@ -17,7 +16,6 @@ export default async function handler(req, res) {
   }
 
   try {
-    // 🔥 BACKEND REAL KEY (hidden)
     const BACKEND_KEY = "VORTEX";
 
     const response = await fetch(
@@ -26,7 +24,9 @@ export default async function handler(req, res) {
 
     const data = await response.json();
 
-    // 🔥 FULL DATA RETURN (no cut)
+    // 🔥 OWNER CHANGE
+    data.owner = "https://MYNK \\n BUY INSTANT CHEAP PRICE";
+
     return res.status(200).json({
       ...data,
       API_BY: "MYNK",
