@@ -6,14 +6,23 @@ export default async function handler(req, res) {
   }
 
   try {
-    // 🔥 New API
     const response = await fetch(
       `https://vehicle.wuaze.com/?vehicle=${regNo}`
     );
 
-    const data = await response.json();
+    const text = await response.text(); // 👈 पहले text lo
 
-    // 🔥 Modify response (branding)
+    let data;
+
+    try {
+      data = JSON.parse(text); // 👈 try JSON
+    } catch {
+      return res.status(500).json({
+        error: "API not returning JSON",
+        raw: text.substring(0, 200) // थोड़ा preview
+      });
+    }
+
     const modified = {
       ...data,
       API_BY: "MYNK",
