@@ -1,18 +1,19 @@
 export default async function handler(req, res) {
-  const { regNo, api_key } = req.query;
+  const { regNo } = req.query;
 
   if (!regNo) {
     return res.status(400).json({ error: "RegNo required" });
   }
 
   try {
+    // 🔥 New API
     const response = await fetch(
-      `http://103.138.96.157:5000/rc-details/${regNo}?api_key=${api_key}`
+      `https://vehicle.wuaze.com/?vehicle=${regNo}`
     );
 
     const data = await response.json();
 
-    // 🔥 Modify response
+    // 🔥 Modify response (branding)
     const modified = {
       ...data,
       API_BY: "MYNK",
