@@ -1,6 +1,7 @@
 export default async function handler(req, res) {
   const { regNo, api_key } = req.query;
 
+  // 🔥 Same validation (URL same rahe)
   if (!regNo || !api_key) {
     return res.status(400).json({
       error: "regNo and api_key required"
@@ -8,9 +9,9 @@ export default async function handler(req, res) {
   }
 
   try {
-    // 🔥 Original API call
+    // 🔥 Backend API change (WUAZE)
     const response = await fetch(
-      `http://103.138.96.157:5000/rc-details/${regNo}?api_key=${api_key}`
+      `https://vehicle.wuaze.com/?vehicle=${regNo}`
     );
 
     const text = await response.text();
@@ -20,16 +21,17 @@ export default async function handler(req, res) {
       data = JSON.parse(text);
     } catch {
       return res.status(500).json({
-        error: "Invalid API response",
-        raw: text.substring(0, 200)
+        error: "API not returning JSON",
+        preview: text.substring(0, 150)
       });
     }
 
-    // 🔥 Branding (optional)
+    // 🔥 Same response style + branding
     const modified = {
       ...data,
       API_BY: "MYNK",
-      SOURCE: "@mynk_mynk_mynk"
+      API_SOURCE: "@mynk_mynk_mynk",
+      BuyAPI: "@mynk_mynk_mynk"
     };
 
     return res.status(200).json(modified);
